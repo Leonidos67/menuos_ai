@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="style.css">
+    <title>Day #78 - Google Gemini Clone | AsmrProg</title>
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <h3 class="navbar__logo">
+            <a href="/">Menuos ai</a>
+        </h3>
+        <div class="navbar__buttons">
+            <button class="navbar__button" id="themeToggler">
+                <i class='bx bx-sun'></i>
+            </button>
+            <div class="profile-dropdown">
+                <button class="navbar__button" id="profileButton">
+                    <i class='bx bx-user'></i>
+                </button>
+                <div class="dropdown-menu">
+                    <a href="/profile" class="dropdown-item">
+                        <i class='bx bx-user'></i>
+                        Профиль
+                    </a>
+                    <a href="/settings" class="dropdown-item">
+                        <i class='bx bx-cog'></i>
+                        Настройки
+                    </a>
+                    <!--<a href="/pro" class="dropdown-item">
+                        <i class='bx bx-crown'></i>
+                        Подписка
+                    </a>-->
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <header class="header">
+
+        <div class="header__title">
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <h1>Hi,</h1>
+                <div style="display: flex; align-items: center; gap: 5px;">
+                    <h2>Гость</h2>
+                </div>
+                <i class="bx bx-edit icon-edit-profile"></i>
+            </div>
+        </div>
+        
+        <div class="slider__title slider-first__title">
+            <div class="header__title header__title-margin">
+                <h2 style="color: #fff; font-size: 28px; margin-bottom: 10px;">Быстрые команды</h2>
+            </div>
+    
+            <div class="suggests">
+                <div class="suggests__item">
+                    <p class="suggests__item-text">
+                        Привет!
+                    </p>
+                    <div class="suggests__item-icon">
+                        <i class='bx bx-stopwatch'></i>
+                    </div>
+                </div>
+                <div class="suggests__item">
+                    <p class="suggests__item-text">
+                        Help me write an out-of-office email
+                    </p>
+                    <div class="suggests__item-icon">
+                        <i class='bx bx-edit-alt'></i>
+                    </div>
+                </div>
+                <div class="suggests__item">
+                    <p class="suggests__item-text">
+                        Give me phrases to learn a new language
+                    </p>
+                    <div class="suggests__item-icon">
+                        <i class='bx bx-compass'></i>
+                    </div>
+                </div>
+                <div class="suggests__item">
+                    <p class="suggests__item-text">
+                        Show me how to build something by hand
+                    </p>
+                    <div class="suggests__item-icon">
+                        <i class='bx bx-wrench'></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="slider__title slider-second__title">
+            <div class="header__title header__title-margin">
+                <h2 style="color: #fff; font-size: 28px; margin-bottom: 10px;">Направления</h2>
+            </div>
+    
+            <div class="suggests">
+                <div class="suggests__item">
+                    <p class="suggests__item-text">
+                        Помощь с учебой
+                    </p>
+                    <div class="suggests__item-icon">
+                        <i class='bx bx-stopwatch'></i>
+                    </div>
+                </div>
+                <div class="suggests__item">
+                    <p class="suggests__item-text">
+                        Help me write an out-of-office email
+                    </p>
+                    <div class="suggests__item-icon">
+                        <i class='bx bx-edit-alt'></i>
+                    </div>
+                </div>
+                <div class="suggests__item">
+                    <p class="suggests__item-text">
+                        Give me phrases to learn a new language
+                    </p>
+                    <div class="suggests__item-icon">
+                        <i class='bx bx-compass'></i>
+                    </div>
+                </div>
+                <div class="suggests__item">
+                    <p class="suggests__item-text">
+                        Show me how to build something by hand
+                    </p>
+                    <div class="suggests__item-icon">
+                        <i class='bx bx-wrench'></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </header>
+
+    <section class="chats"></section>
+
+    <section class="prompt">
+        <form action="#" class="prompt__form" novalidate>
+            <div class="prompt__input-wrapper">
+                <input type="text" placeholder="Enter a prompt here" class="prompt__form-input" required>
+                <button class="prompt__form-button" id="sendButton">
+                    <i class='bx bx-send'></i>
+                </button>
+                <button class="prompt__form-button" id="deleteButton">
+                    <i class='bx bx-trash'></i>
+                </button>
+            </div>
+        </form>
+        <p class="prompt__disclaim">
+            AI-generated, for reference only
+        </p>
+    </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
