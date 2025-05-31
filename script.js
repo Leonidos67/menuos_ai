@@ -60,6 +60,15 @@ const loadSavedChatHistory = () => {
                 <span class="copy-text">Новый чат</span>
                 <i class='bx bx-plus'></i>
             </span>
+            <span onClick="handleLike(this)" class="message__icon message__icon-margin hide">
+                <i class='bx bx-like'></i>
+            </span>
+            <span onClick="handleDislike(this)" class="message__icon message__icon-margin hide">
+                <i class='bx bx-dislike'></i>
+            </span>
+            <span onClick="handleHeart(this)" class="message__icon message__icon-margin hide">
+                <i class='bx bx-heart'></i>
+            </span>
         
         `;
 
@@ -80,6 +89,7 @@ const createChatMessageElement = (htmlContent, ...cssClasses) => {
     const messageElement = document.createElement("div");
     messageElement.classList.add("message", ...cssClasses);
     messageElement.innerHTML = htmlContent;
+    messageElement.dataset.messageId = Date.now().toString(); // Добавляем уникальный ID
     return messageElement;
 }
 
@@ -87,16 +97,38 @@ const createChatMessageElement = (htmlContent, ...cssClasses) => {
 const showTypingEffect = (rawText, htmlText, messageElement, incomingMessageElement, skipEffect = false) => {
     const copyIconElement = incomingMessageElement.querySelector(".message__icon");
     const newChatIconElement = incomingMessageElement.querySelector(".message__icon-margin");
-    copyIconElement.classList.add("hide"); // Initially hide copy button
-    newChatIconElement.classList.add("hide"); // Initially hide new chat button
+    const likeIconElement = incomingMessageElement.querySelector(".message__icon:nth-child(4)");
+    const dislikeIconElement = incomingMessageElement.querySelector(".message__icon:nth-child(5)");
+    const heartIconElement = incomingMessageElement.querySelector(".message__icon:nth-child(6)");
+    
+    copyIconElement.classList.add("hide");
+    newChatIconElement.classList.add("hide");
+    likeIconElement.classList.add("hide");
+    dislikeIconElement.classList.add("hide");
+    heartIconElement.classList.add("hide");
+
+    // Проверяем сохраненное состояние реакций
+    const messageId = incomingMessageElement.dataset.messageId;
+    if (messageId) {
+        const savedReaction = localStorage.getItem(`message_${messageId}_reaction`);
+        if (savedReaction === 'like') {
+            likeIconElement.classList.add('active');
+        } else if (savedReaction === 'dislike') {
+            dislikeIconElement.classList.add('active');
+        } else if (savedReaction === 'heart') {
+            heartIconElement.classList.add('active');
+        }
+    }
 
     if (skipEffect) {
-        // Display content directly without typing
         messageElement.innerHTML = htmlText;
         hljs.highlightAll();
         addCopyButtonToCodeBlocks();
-        copyIconElement.classList.remove("hide"); // Show copy button
-        newChatIconElement.classList.remove("hide"); // Show new chat button
+        copyIconElement.classList.remove("hide");
+        newChatIconElement.classList.remove("hide");
+        likeIconElement.classList.remove("hide");
+        dislikeIconElement.classList.remove("hide");
+        heartIconElement.classList.remove("hide");
         isGeneratingResponse = false;
         return;
     }
@@ -114,6 +146,9 @@ const showTypingEffect = (rawText, htmlText, messageElement, incomingMessageElem
             addCopyButtonToCodeBlocks();
             copyIconElement.classList.remove("hide");
             newChatIconElement.classList.remove("hide");
+            likeIconElement.classList.remove("hide");
+            dislikeIconElement.classList.remove("hide");
+            heartIconElement.classList.remove("hide");
         }
     }, 75);
 };
@@ -207,6 +242,15 @@ const displayLoadingAnimation = () => {
         <span onClick="handleNewChat()" class="message__icon message__icon-margin hide">
             <span class="copy-text">Новый чат</span>
             <i class='bx bx-plus'></i>
+        </span>
+        <span onClick="handleLike(this)" class="message__icon message__icon-margin hide">
+            <i class='bx bx-like'></i>
+        </span>
+        <span onClick="handleDislike(this)" class="message__icon message__icon-margin hide">
+            <i class='bx bx-dislike'></i>
+        </span>
+        <span onClick="handleHeart(this)" class="message__icon message__icon-margin hide">
+            <i class='bx bx-heart'></i>
         </span>
     
     `;
@@ -373,3 +417,141 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+
+// Функция для создания частиц
+const createParticles = (button, type) => {
+    const rect = button.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    
+    // Добавляем класс тряски к кнопке
+    button.classList.add('shake');
+    setTimeout(() => button.classList.remove('shake'), 500);
+
+    // Массивы иконок для каждого типа реакции
+    const likeIcons = ['bx-star', 'bx-bulb', 'bx-smile', 'bx-happy', 'bx-cool', 'bx-wink-smile'];
+    const dislikeIcons = ['bx-sad', 'bx-angry', 'bx-confused', 'bx-tired', 'bx-dizzy', 'bx-meh'];
+    const heartIcons = ['bx-gift', 'bx-cake', 'bx-crown', 'bx-diamond', 'bx-badge', 'bx-medal'];
+
+    // Выбираем массив иконок в зависимости от типа
+    let icons;
+    switch(type) {
+        case 'like':
+            icons = likeIcons;
+            break;
+        case 'dislike':
+            icons = dislikeIcons;
+            break;
+        case 'heart':
+            icons = heartIcons;
+            break;
+    }
+
+    // Создаем 12 частиц
+    for (let i = 0; i < 12; i++) {
+        const particle = document.createElement('div');
+        particle.className = `particle ${type}`;
+        
+        // Случайный угол и расстояние для каждой частицы
+        const angle = (i * 30) + Math.random() * 30;
+        const distance = 50 + Math.random() * 50;
+        const tx = Math.cos(angle * Math.PI / 180) * distance;
+        const ty = Math.sin(angle * Math.PI / 180) * distance;
+        const tr = Math.random() * 360;
+        
+        // Устанавливаем CSS переменные для анимации
+        particle.style.setProperty('--tx', `${tx}px`);
+        particle.style.setProperty('--ty', `${ty}px`);
+        particle.style.setProperty('--tr', `${tr}deg`);
+        
+        // Выбираем случайную иконку из соответствующего массива
+        const randomIcon = icons[Math.floor(Math.random() * icons.length)];
+        particle.innerHTML = `<i class='bx ${randomIcon}'></i>`;
+        
+        particle.style.left = `${centerX}px`;
+        particle.style.top = `${centerY}px`;
+        
+        document.body.appendChild(particle);
+        
+        // Запускаем анимацию
+        particle.style.animation = 'particle 0.8s ease-out forwards';
+        
+        // Удаляем частицу после завершения анимации
+        setTimeout(() => {
+            particle.remove();
+        }, 800);
+    }
+};
+
+// Обновляем функции обработки реакций
+const handleLike = (button) => {
+    const messageElement = button.closest('.message');
+    if (!messageElement) return;
+
+    const likeButton = messageElement.querySelector('.message__icon:nth-child(4)');
+    const dislikeButton = messageElement.querySelector('.message__icon:nth-child(5)');
+    const heartButton = messageElement.querySelector('.message__icon:nth-child(6)');
+    
+    if (!likeButton || !dislikeButton || !heartButton) return;
+    
+    likeButton.classList.add('active');
+    dislikeButton.classList.remove('active');
+    heartButton.classList.remove('active');
+    
+    // Создаем эффект распыления
+    createParticles(likeButton, 'like');
+    
+    // Сохраняем состояние в localStorage
+    const messageId = messageElement.dataset.messageId;
+    if (messageId) {
+        localStorage.setItem(`message_${messageId}_reaction`, 'like');
+    }
+};
+
+const handleDislike = (button) => {
+    const messageElement = button.closest('.message');
+    if (!messageElement) return;
+
+    const likeButton = messageElement.querySelector('.message__icon:nth-child(4)');
+    const dislikeButton = messageElement.querySelector('.message__icon:nth-child(5)');
+    const heartButton = messageElement.querySelector('.message__icon:nth-child(6)');
+    
+    if (!likeButton || !dislikeButton || !heartButton) return;
+    
+    dislikeButton.classList.add('active');
+    likeButton.classList.remove('active');
+    heartButton.classList.remove('active');
+    
+    // Создаем эффект распыления
+    createParticles(dislikeButton, 'dislike');
+    
+    // Сохраняем состояние в localStorage
+    const messageId = messageElement.dataset.messageId;
+    if (messageId) {
+        localStorage.setItem(`message_${messageId}_reaction`, 'dislike');
+    }
+};
+
+const handleHeart = (button) => {
+    const messageElement = button.closest('.message');
+    if (!messageElement) return;
+
+    const likeButton = messageElement.querySelector('.message__icon:nth-child(4)');
+    const dislikeButton = messageElement.querySelector('.message__icon:nth-child(5)');
+    const heartButton = messageElement.querySelector('.message__icon:nth-child(6)');
+    
+    if (!likeButton || !dislikeButton || !heartButton) return;
+    
+    heartButton.classList.add('active');
+    likeButton.classList.remove('active');
+    dislikeButton.classList.remove('active');
+    
+    // Создаем эффект распыления
+    createParticles(heartButton, 'heart');
+    
+    // Сохраняем состояние в localStorage
+    const messageId = messageElement.dataset.messageId;
+    if (messageId) {
+        localStorage.setItem(`message_${messageId}_reaction`, 'heart');
+    }
+};

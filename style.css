@@ -124,6 +124,20 @@ body.hide-header .header {
     margin-top: 20px;
 }
 
+.version-platform {
+    text-align: center;
+    font-size: 12px;
+    margin-top: 10px;
+    color: var(--text-color);
+}
+
+.text-obj-h2 {
+    color: var(--text-color);
+    font-weight: 400;
+    font-size: 28px;
+    margin-bottom: 10px;
+}
+
 .suggests{
     display: flex;
     align-items: center;
@@ -134,7 +148,7 @@ body.hide-header .header {
 .suggests__item{
     background: var(--secondary-color);
     color: var(--text-secondary-color);
-    padding: 1rem;
+    padding: 1rem 0rem 0rem 1rem;
     height: 12.5rem;
     width: 12.5rem;
     border-radius: 0.75rem;
@@ -163,6 +177,15 @@ body.hide-header .header {
     background: var(--primary-color);
     padding: 0.5rem;
     border-radius: 50%;
+}
+
+.suggests__item-icon img {
+    width: 10vh;
+    height: 10vh;
+    object-fit: contain;
+    transition: transform 0.3s ease;
+    margin-left: auto;
+    display: block;
 }
 
 .prompt{
@@ -332,6 +355,19 @@ body.hide-header .header {
 
 .chats .message__icon:active {
     background-color: var(--secondary-active-color);
+}
+
+.chats .message__icon.active {
+    background-color: var(--secondary-active-color);
+    color: var(--text-color);
+}
+
+.chats .message__icon.active i {
+    color: var(--text-color);
+}
+
+.chats .message__icon.active .copy-text {
+    color: var(--text-color);
 }
 
 .chats .message__loading-indicator{
@@ -627,4 +663,47 @@ blockquote{
 .username-input:focus {
     border-bottom: 2px solid var(--heading-secondary-color);
     width: 200px;
+}
+
+@keyframes shake {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(-5deg); }
+    75% { transform: rotate(5deg); }
+}
+
+@keyframes particle {
+    0% {
+        transform: translate(0, 0) rotate(0deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(var(--tx), var(--ty)) rotate(var(--tr));
+        opacity: 0;
+    }
+}
+
+.message__icon.shake {
+    animation: shake 0.5s ease-in-out;
+}
+
+.particle {
+    position: absolute;
+    pointer-events: none;
+    z-index: 1000;
+}
+
+.particle i {
+    font-size: 16px;
+}
+
+.particle.like i {
+    color: #FFD700;
+}
+
+.particle.dislike i {
+    color: #FFD700;
+}
+
+.particle.heart i {
+    color: #FF4444;
 }
